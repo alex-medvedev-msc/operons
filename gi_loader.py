@@ -36,7 +36,7 @@ def load_gi(gi):
 
 def main():
 
-    ids_path = "org_id.csv"
+    ids_path = "negative.csv"
     ids = []
     with open(ids_path, 'r') as file:
         ids = [line.strip() for line in file.readlines()]
@@ -51,7 +51,7 @@ def main():
             table = table.append(entry, ignore_index=True)
         print("operon {0} loaded {1} gis".format(id, len(gene_entries)))
 
-    table.to_csv("table.csv", index=False)
+    table.to_csv("table_negative.csv", index=False)
 
 
 if __name__ == '__main__':

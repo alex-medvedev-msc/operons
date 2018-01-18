@@ -1,8 +1,4 @@
-
-
-
 def main():
-
     positive_examples_path = "org_id.csv"
 
     positive_examples = set()
@@ -30,9 +26,9 @@ def main():
     dirty_negative = set.union(lacA_examples, lacY_examples, lacZ_examples)
     clean_negative = dirty_negative.difference(positive_examples)
 
-    for a in clean_negative:
-        if a in positive_examples:
-            print("FUCK!!!")
+    with open("negative.csv", 'w') as file:
+        file.writelines(str(s)+'\n' for s in clean_negative)
+
 
 if __name__ == '__main__':
     main()
