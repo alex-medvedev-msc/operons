@@ -54,7 +54,7 @@ def parse_organisms(path, pattern):
 def main():
 
     org_path = "organisms.json"
-    ids = parse_organisms(org_path, pattern="")[:500]
+    ids = parse_organisms(org_path, pattern="")[500:1000]
 
     table = pandas.DataFrame()
     for id in ids:
@@ -65,7 +65,7 @@ def main():
         table = table.append(temp, ignore_index=True)
         print("organism {0} loaded {1} gis in {2}".format(id, len(gene_entries), time() - now))
 
-    table.to_csv("all_gis_1_500.csv", index=False)
+    table.to_csv("all_gis_500_1000.csv", index=False)
 
 
 if __name__ == '__main__':
