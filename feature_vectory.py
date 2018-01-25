@@ -43,7 +43,11 @@ def operon_pairs_count(operon):
         left, right = operon.iat[i, 2], operon.iat[i+1, 2]
         if not left.startswith("lac") or not right.startswith("lac"):
             continue
-        pair = left[:4] + "_" + right[:4]
+        strand = operon.iat[i, 4]
+        if strand == '-':
+            pair = right[:4] + "_" + left[:4]
+        else:
+            pair = left[:4] + "_" + right[:4]
         if pair not in pairs:
             pairs[pair] = 1
         else:
@@ -64,7 +68,7 @@ def vector(operon):
 
 def process_table(table_path):
     positive_path = table_path
-    positive = pandas.read_csv(positive_path).loc[:, ["start", "end", "gene", "operon_id"]]
+    positive = pandas.read_csv(positive_path).loc[:, ["start", "end", "gene", "operon_id", "strand"]]
     print(len(numpy.unique(positive.operon_id.values)))
     positive_features = positive.groupby('operon_id').apply(vector).groupby('operon_id').agg(lambda x: x.iloc[0])
     return positive_features
