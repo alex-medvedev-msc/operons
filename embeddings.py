@@ -52,7 +52,7 @@ def do_vectors(path, embeddings_path):
 
 def cluster(vectors_path):
     X = pandas.read_csv(vectors_path, index_col='operon_id')
-    scan = DBSCAN(min_samples=15, metric='l2', n_jobs=4, eps=0.5, algorithm='kd_tree')
+    scan = DBSCAN(min_samples=5, metric='l2', n_jobs=4, eps=0.3, algorithm='kd_tree')
     labels = scan.fit_predict(normalize(X.values, "l2"))
     labels_frame = pandas.DataFrame(data=labels, index=X.index, columns=["labels"])
     labels_frame.to_csv("clusters_gis.csv")
@@ -71,7 +71,7 @@ def hist(vectors_path):
 def plot_clusters():
     labels = pandas.read_csv("clusters_gis.csv")
     clusters = {}
-    for index, row in labels[labels["labels"] > 0].iterrows():
+    for index, row in labels[labels["labels"] >= 0].iterrows():
         if str(row["labels"]) in clusters:
 
             clusters[str(row["labels"])].append(str(row["operon_id"]))

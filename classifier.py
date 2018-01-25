@@ -16,7 +16,7 @@ def main():
     classifier = GradientBoostingClassifier()
     classifier.fit(X_train, y_train)
     y_pred = classifier.predict_proba(X_test)[:, 1]
-    preds = pandas.DataFrame.from_dict({"pred": list(y_pred), "test": list(y_test)})
+    preds = pandas.DataFrame.from_dict({"pred": list(y_pred), "result_lac": list(y_test)})
     print(log_loss(y_test, y_pred))
 
 
