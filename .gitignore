@@ -1,3 +1,5 @@
 .idea
 operons.iml
 /biovec/data/
+/biovec/transformed/
+/biovec/models/

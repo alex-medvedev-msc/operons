@@ -51,6 +51,7 @@ def parse_organisms(path, pattern):
 
     return ids
 
+
 def main():
 
     org_path = "organisms.json"
