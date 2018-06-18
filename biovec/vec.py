@@ -68,7 +68,7 @@ def tag_regions(regions):
             yield TaggedDocument(words=words, tags=tags)
 
 
-def proteins_from_table(filename: str):
+def proteins_from_table(filename: str, is_doc2vec=True):
     # gene,gi,operon_id,sequence,start,stop,strand,synonym,organism_id,genome_id
     genes = pandas.read_csv(filename)
     print(genes.shape)
@@ -86,7 +86,10 @@ def proteins_from_table(filename: str):
                     break
                 word = seq[j:j+3]
                 words.append(word)
-            yield TaggedDocument(words=words, tags=tags)
+            if is_doc2vec:
+                yield TaggedDocument(words=words, tags=tags)
+            else:
+                yield words
 
 
 def embeddings_from_fasta():
@@ -141,18 +144,24 @@ def load_region_embeddings(regions_file, is_doc2vec=True):
 
 def region_embeddings():
     documents = load_region_embeddings('regions.csv')
-    doc2vec = Doc2Vec(documents, workers=8, size=20, min_count=2, window=20, dm_concat=1, dbow_words=1, dm=0)
+    doc2vec = Doc2Vec(documents, workers=8, size=50, min_count=1, window=20, dm_concat=1, dbow_words=1, dm=0)
     doc2vec.save('models/doors_regions.doc2vec')
 
 
 def region_word_embeddings():
     sentences = list(load_region_embeddings('regions.csv', is_doc2vec=False))
-    doc2vec = Word2Vec(sentences, workers=8, size=50, min_count=2, window=10)
-    doc2vec.save('models/doors_regions.word2vec')
+    w2v = Word2Vec(sentences, workers=8, size=50, min_count=2, window=10)
+    w2v.save('models/doors_regions.word2vec')
+
+
+def protein_word_embeddings():
+    sentences = list(proteins_from_table('genes.csv', is_doc2vec=False))
+    w2v = Word2Vec(sentences, workers=8, size=50, min_count=2, window=10)
+    w2v.save('models/doors_proteins.word2vec')
 
 
 def main():
-    region_word_embeddings()
+    region_embeddings()
 
 
 if __name__ == '__main__':
